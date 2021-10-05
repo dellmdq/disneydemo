@@ -1,6 +1,7 @@
-package com.alkemy.disneydemo.dao;
+package com.alkemy.disneydemo.auth.dao;
 
-import com.alkemy.disneydemo.model.Genre;
+import com.alkemy.disneydemo.auth.model.Role;
+import com.alkemy.disneydemo.model.Actor;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,46 +12,44 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
-public class GenreDAOHibernateImpl implements GenreDAO {
+public class RoleDAOHibernateImpl implements RoleDAO {
 
     private EntityManager entityManager;
 
     @Autowired
-    public GenreDAOHibernateImpl(EntityManager theEntityManager){
+    public RoleDAOHibernateImpl(EntityManager theEntityManager){
         entityManager = theEntityManager;
-    };
+    }
 
     @Override
-    public List<Genre> getAll() {
-        //get the current session
+    public List<Role> getAll() {
         Session currentSession = entityManager.unwrap(Session.class);
-        //create query
-        Query theQuery = currentSession.createQuery("from Genre",Genre.class);
-        //execute and return
+        Query<Role> theQuery = currentSession.createQuery("from Role", Role.class);
         return theQuery.getResultList();
     }
 
     @Override
-    public Genre get(int theId) {
-        //get the hibernate session
+    public Role get(int theId) {
         Session currentSession = entityManager.unwrap(Session.class);
+        return currentSession.get(Role.class, theId);
 
-        return currentSession.get(Genre.class, theId);
     }
 
     @Override
-    public void save(Genre theGenre) {
+    public void save(Role theRole) {
+        //get hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.saveOrUpdate(theGenre);
+        //save or update actor
+        currentSession.saveOrUpdate(theRole);
     }
 
     @Override
     public void delete(int theId) {
-        //get session
+        //get the hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
-
-        Query theQuery = currentSession.createQuery("delete from Genre where id=:genreId");
-        theQuery.setParameter("genreId", theId);
+        //delete object with primary key
+        Query theQuery = currentSession.createQuery("delete from Role where id=:roleId");
+        theQuery.setParameter("roleId", theId);
         theQuery.executeUpdate();
     }
 }

@@ -1,13 +1,14 @@
 package com.alkemy.disneydemo.service;
 
 import java.util.List;
+import com.alkemy.disneydemo.model.MovieTVSerie;
 
 public interface MovieTVSerieService {
-    public List<com.alkemy.disneydemo.model.MovieTVSerie> getAll();
+    public List<MovieTVSerie> getAll();
 
-    public com.alkemy.disneydemo.model.MovieTVSerie get(int theId);
+    public MovieTVSerie get(int theId);
 
-    public void save(com.alkemy.disneydemo.model.MovieTVSerie theMovieTVSerie);
+    public void save(MovieTVSerie theMovieTVSerie);
 
     public void delete(int theId);
 }

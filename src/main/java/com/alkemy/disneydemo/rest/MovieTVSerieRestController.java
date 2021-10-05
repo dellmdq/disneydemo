@@ -30,9 +30,24 @@ public class MovieTVSerieRestController implements Serializable {
     }
 
     @PostMapping("/movietvseries")
-    public MovieTVSerie addMovieTvSerie(@RequestBody MovieTVSerie movieTVSerie){
-
+    public MovieTVSerie add(@RequestBody MovieTVSerie movieTVSerie){
+        movieTVSerie.setId(0);
         movieTVSerieService.save(movieTVSerie);
         return movieTVSerie;
+    }
+
+    @PutMapping("/movietvseries")
+    public MovieTVSerie update(@RequestBody MovieTVSerie movieTVSerie){
+        movieTVSerieService.save(movieTVSerie);
+        return movieTVSerie;
+    }
+
+    @DeleteMapping("/movietvseries/{movietvseriesId}")
+    public MovieTVSerie delete(@PathVariable int movietvseriesId){
+        MovieTVSerie tempMovieTvSerie = movieTVSerieService.get(movietvseriesId);
+
+        movieTVSerieService.delete(movietvseriesId);
+
+        return tempMovieTvSerie;
     }
 }

@@ -1,28 +1,28 @@
-package com.alkemy.disneydemo.dao;
+package com.alkemy.disneydemo.auth.dao;
 
-import com.alkemy.disneydemo.model.Actor;
+import com.alkemy.disneydemo.auth.model.User;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-@Repository
-public class ActorDAOHibernateImpl implements ActorDAO {
+public class UserDAOHibernateImpl implements UserDAO{
 
     private EntityManager entityManager;
 
-    @Autowired//spring will find it anyways but its a good practice to show the constructor injection
-    public ActorDAOHibernateImpl(EntityManager theEntityManager) {entityManager = theEntityManager;}
+    @Autowired
+    public UserDAOHibernateImpl(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
-    public List<Actor> getAll() {
+    public List<User> getAll() {
         //get the current hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
         //create a query
-        Query<Actor> theQuery = currentSession.createQuery("from Actor", Actor.class);
+        Query<User> theQuery = currentSession.createQuery("from User", User.class);
 
         //execute query and get results
         //return results
@@ -30,20 +30,20 @@ public class ActorDAOHibernateImpl implements ActorDAO {
     }
 
     @Override
-    public Actor get(int theId) {
+    public User get(int theId) {
         //get hibernate
         Session currentSession = entityManager.unwrap(Session.class);
-        //get the actor
-        return currentSession.get(Actor.class, theId);
+        //get the User
+        return currentSession.get(User.class, theId);
     }
 
 
     @Override
-    public void save(Actor theActor) {
+    public void save(User theUser) {
         //get hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
-        //save or update actor
-        currentSession.saveOrUpdate(theActor);
+        //save or update User
+        currentSession.saveOrUpdate(theUser);
     }
 
 
@@ -53,20 +53,8 @@ public class ActorDAOHibernateImpl implements ActorDAO {
         //get the hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
         //delete object with primary key
-        Query theQuery = currentSession.createQuery("delete from Actor where id=:actorId");
-        theQuery.setParameter("actorId", theId);
+        Query theQuery = currentSession.createQuery("delete from User where id=:userId");
+        theQuery.setParameter("UserId", theId);
         theQuery.executeUpdate();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

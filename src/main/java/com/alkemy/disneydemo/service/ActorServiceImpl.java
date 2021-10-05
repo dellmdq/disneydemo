@@ -29,11 +29,13 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    @Transactional
     public void save(Actor theActor) {
         actorDAO.save(theActor);
     }
 
     @Override
+    @Transactional
     public void delete(int theId) {
         actorDAO.delete(theId);
     }

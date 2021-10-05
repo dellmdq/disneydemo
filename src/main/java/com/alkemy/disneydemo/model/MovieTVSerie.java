@@ -1,16 +1,14 @@
 package com.alkemy.disneydemo.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
-@Entity
+@Entity(name="MovieTVSerie")
 @Table(name="movietvserie")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -32,17 +30,20 @@ public class MovieTVSerie implements Serializable {
     @Column(name="rating")
     private int rating;
 
-    @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+    @Nullable
+    //@JsonBackReference
+    @ManyToOne(cascade= CascadeType.ALL //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
+    )
     @JoinColumn(name="genre_id")
     private Genre genre;
 
-    @JsonBackReference
+    @Nullable
+    @JsonIgnoreProperties("movietvseries")
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})//todo chequear que se borre la tabla combinada pero no los actores en la tabla de actores
     @JoinTable(name="movietvserie_actor",
             joinColumns = {@JoinColumn(name="movietvserie_id")},
             inverseJoinColumns = {@JoinColumn(name="actor_id")})
     private Set<Actor> actors = new HashSet<Actor>();
-
 
     //constructors
     public MovieTVSerie() {
@@ -115,7 +116,6 @@ public class MovieTVSerie implements Serializable {
     }
 
     //to string
-
     @Override
     public String toString() {
         return "Show{" +
@@ -129,13 +129,5 @@ public class MovieTVSerie implements Serializable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof MovieTVSerie){
-            MovieTVSerie theMovieTVSerie = (MovieTVSerie) obj;
-            return this.getId() == theMovieTVSerie.getId();
-        }
-        return false;
-    }
 
 }

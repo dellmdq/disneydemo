@@ -2,15 +2,16 @@ package com.alkemy.disneydemo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@Entity
+@Entity(name="Actor")
 @Table(name="actor")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
@@ -39,17 +40,18 @@ public class Actor implements Serializable {
 
     //muchos a muchos //todo ver tipos de cascade
     @JsonBackReference
-    @ManyToMany(mappedBy = "actors",fetch=FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
-    /*@JoinTable(name="actor_show",
+    @JsonIgnoreProperties({"actors","genres"})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name="movietvserie_actor",
             joinColumns = @JoinColumn(name="actor_id"),//todo cargar actors and show para testear esto
-            inverseJoinColumns =@JoinColumn(name="show_id")
-    )*/
-    private List<MovieTVSerie> movieTVSeries = new ArrayList<MovieTVSerie>();
+            inverseJoinColumns =@JoinColumn(name="movietvserie_id")
+    )
+    private Set<MovieTVSerie> movieTVSeries = new HashSet<MovieTVSerie>();
 
     public Actor() {
     }
 
-    public Actor(String image, String name, int age, float weight, String bio, List<MovieTVSerie> movieTVSeries) {
+    public Actor(String image, String name, int age, float weight, String bio, Set<MovieTVSerie> movieTVSeries) {
         this.image = image;
         this.name = name;
         this.age = age;
@@ -106,13 +108,24 @@ public class Actor implements Serializable {
         this.bio = bio;
     }
 
-    public List<MovieTVSerie> getShows() {
+    public Set<MovieTVSerie> getMovieTVSeries() {
         return movieTVSeries;
     }
 
-    public void setShows(List<MovieTVSerie> movieTVSeries) {
+    public void setMovieTVSeries(Set<MovieTVSerie> movieTVSeries) {
         this.movieTVSeries = movieTVSeries;
     }
+
+    //utility methods to handle manytomany operations
+     public void addMovieTvSerie(MovieTVSerie movieTVSerie){
+        this.movieTVSeries.add(movieTVSerie);
+        movieTVSerie.getActors().add(this);
+     }
+
+     public void removeMovieTvSerie(MovieTVSerie movieTVSerie){
+        this.movieTVSeries.remove(movieTVSerie);
+        movieTVSerie.getActors().remove(this);
+     }
 
     @Override
     public String toString() {
@@ -127,13 +140,5 @@ public class Actor implements Serializable {
                 '}';
     }
 
-    /*@Override
-    public boolean equals(Object obj) {
-        if(obj instanceof Actor){
-            Actor theActor = (Actor) obj;
-            return this.getId() == theActor.getId();
-        }
-        return false;
-    }*/
 
 }
