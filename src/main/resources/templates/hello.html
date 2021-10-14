@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
-	<title>luv2code Company Home Page</title>
+	<title>DisneyDemo Company Home Page</title>
 </head>
 
 <body>
-	<h2>luv2code Company Home Page</h2>
+	<h2>DisneyDemo Company Home Page</h2>
 	<hr>
 	
 	<p>
-	Welcome to the luv2code company home page!
+	Welcome to the DisneyDemo company home page!
 	</p>
 	
 	<hr>
@@ -60,8 +60,14 @@
 	
 		<input type="submit" value="Logout" />
 	
-	</form>	
-			
+	</form>
+
+	<form th:action="@{/characters}"
+		  method="GET">
+
+		<input type="submit" value="GET characters" />
+
+	</form>
 </body>
 
 </html>

@@ -3,7 +3,6 @@ package com.alkemy.disneydemo.rest;
 import com.alkemy.disneydemo.model.Genre;
 import com.alkemy.disneydemo.model.MovieTVSerie;
 import com.alkemy.disneydemo.service.GenreService;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

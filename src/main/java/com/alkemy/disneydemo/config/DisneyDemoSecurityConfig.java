@@ -36,13 +36,14 @@ public class DisneyDemoSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/api/**","/","index","/css/*","js/*","/resources/**", "/registration","/auth/**").permitAll()
-                    .anyRequest().authenticated()
+                    .antMatchers("/api/**","/","index","/css/*","js/*","/resources/**", "/registration","/auth/login","/characters/**").authenticated()
+                    .antMatchers("/auth/register/**").permitAll()
+                //.anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/auth/login")
                     .loginProcessingUrl("/auth/login/authenticateTheUser")
-                .defaultSuccessUrl("/home/home")
+                .defaultSuccessUrl("/")
                     .permitAll()
                     .and()
                 .httpBasic()

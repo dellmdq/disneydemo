@@ -1,17 +1,16 @@
 package com.alkemy.disneydemo.rest;
 
 import com.alkemy.disneydemo.model.Actor;
-import com.alkemy.disneydemo.model.MovieTVSerie;
 import com.alkemy.disneydemo.service.ActorService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/characters")
 public class ActorRestController implements Serializable {
 
     private ActorService actorService;
@@ -20,29 +19,29 @@ public class ActorRestController implements Serializable {
     public ActorRestController(ActorService theActorService){ actorService = theActorService;}
 
     //expose "/actor" and return list of actors
-    @GetMapping("/actors")
+    @GetMapping
     public List<Actor> getAll() {return actorService.getAll();}
 
-    @GetMapping("/actors/{actorId}")
+    @GetMapping("/{actorId}")
     public Actor get(@PathVariable int actorId) {
         return actorService.get(actorId);
     }
 
-     @PostMapping("/actors")
+     @PostMapping
      public Actor add(@RequestBody Actor theActor){
             theActor.setId(0);
             actorService.save(theActor);
             return theActor;
     }
 
-    @PutMapping("/actors")
+    @PutMapping
     public Actor update(@RequestBody Actor theActor){
 
         actorService.save(theActor);
         return theActor;
     }
 
-    @DeleteMapping("actors/{actorId}")
+    @DeleteMapping("/{actorId}")
     public String delete(@PathVariable int actorId){
         Actor tempActor = actorService.get(actorId);
         /*getting movieTvSerieSet
