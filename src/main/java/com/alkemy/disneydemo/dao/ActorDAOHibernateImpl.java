@@ -1,6 +1,7 @@
 package com.alkemy.disneydemo.dao;
 
 import com.alkemy.disneydemo.model.Actor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ActorDAOHibernateImpl implements ActorDAO {
