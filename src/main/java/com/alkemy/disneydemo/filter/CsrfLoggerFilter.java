@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+/**
+ * Filtro desarrollado para poder autorizar los requesthttp
+ * desde postman
+ *
+ *
+ * **/
 public class CsrfLoggerFilter extends OncePerRequestFilter {
 
 

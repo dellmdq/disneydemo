@@ -39,4 +39,20 @@ public class ActorServiceImpl implements ActorService {
     public void delete(int theId) {
         actorDAO.delete(theId);
     }
+
+    @Override
+    public List<Actor> getActorsByName(String name) {
+        return actorDAO.getActorsByName(name);
+    }
+
+    @Override
+    public List<Actor> getActorsByAge(int age) {
+        return actorDAO.getActorsByAge(age);
+    }
+
+    @Override
+    public List<Actor> getActorsByMovieTVSerie(int theMovieTVSerieId) {
+
+        return actorDAO.getActorsByMovieTVSerieId(theMovieTVSerieId);
+    }
 }

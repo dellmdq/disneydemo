@@ -2,6 +2,7 @@ package com.alkemy.disneydemo.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.Nullable;
@@ -31,6 +32,7 @@ public class Genre implements Serializable {
 
 
     @Nullable
+    @JsonIgnore
     //@JsonManagedReference
     @JsonIgnoreProperties({"genre","actors"})
     @OneToMany(mappedBy="genre",

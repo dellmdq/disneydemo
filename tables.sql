@@ -54,9 +54,6 @@ insert into `movietvserie` values
 	(1,'foto', 'Bugs Bunny The Movie', '1998-10-21', 4, 2),
 	(2,'foto', 'Rocko in Conglomo', '2015-09-11', 5, 1),
     (3,'foto', 'Pursuing the roadrunner', '2015-09-11', 5, 3);
-
-
-
    
 DROP TABLE IF EXISTS `movietvserie_actor`;   
 CREATE TABLE `movietvserie_actor` (

@@ -14,6 +14,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,11 +30,22 @@ public class ActorRestController implements Serializable {
     public ActorRestController(ActorService theActorService){ actorService = theActorService;}
 
     //expose "/actor" and return list of actors. ONLY SHOW NAME AND IMAGE
-    //@GetMapping
-    //public List<Actor> getAll() {return actorService.getAll();}
-
     @GetMapping
-    public List<Actor> getAll() {
+    public List<Actor> getAll(@QueryParam("name") String name,
+                              @QueryParam("age") Integer age,
+                              @QueryParam("movies") Integer movies){
+
+        if(name != null && name.length() > 0 ){
+            return actorService.getActorsByName(name);
+        }
+        if(age != null && age >= 0 ){
+            return actorService.getActorsByAge(age);
+        }
+        if(movies != null && movies >= 0 ){
+            return actorService.getActorsByMovieTVSerie(movies);
+        }
+
+        //getall sin filtros
         JsonResult json = JsonResult.instance();
         List<Actor> actors = actorService.getAll();
         String[] excludedProps = {"id","age","weight","bio","movieTVSeries"};
@@ -44,30 +56,15 @@ public class ActorRestController implements Serializable {
                 .returnValue();
     }
 
-
-    ///////////************TEST GET ALL VIEW JSON VIEWER***********////////////
-/*
-    @GetMapping
-    public String getAll() {
-        try {
-            //execute query and get results
-            //return results
-            List<Actor> actorSet = actorService.getAll();
-            //initialize jackson
-            ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
-            String json = mapper.writeValueAsString(JsonView.with(actorSet).onClass(Actor.class, match().exclude("id")));
-
-            //apply json properties filter for id,age,weight and bio
-            return json;
-        }
-        catch(JsonProcessingException exc) {
-            return null;
-        }
-    }*/
-
     @GetMapping("/{actorId}")
     public Actor get(@PathVariable int actorId) {
-        return actorService.get(actorId);
+        JsonResult json = JsonResult.instance();
+        Actor theActor = actorService.get(actorId);
+        String[] includedProps = {"movieTVSeries"};
+
+        return json.use(JsonView.with(theActor)
+                        .onClass(Actor.class, Match.match().include(includedProps)))
+                        .returnValue();
     }
 
      @PostMapping

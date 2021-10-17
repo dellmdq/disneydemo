@@ -1,7 +1,7 @@
 package com.alkemy.disneydemo.dao;
 
 import com.alkemy.disneydemo.model.Actor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.alkemy.disneydemo.model.MovieTVSerie;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public class ActorDAOHibernateImpl implements ActorDAO {
@@ -55,9 +54,55 @@ public class ActorDAOHibernateImpl implements ActorDAO {
         //get the hibernate session
         Session currentSession = entityManager.unwrap(Session.class);
         //delete object with primary key
-        Query theQuery = currentSession.createQuery("delete from Actor where id=:actorId");
+        Query<Actor> theQuery = currentSession.createQuery("delete from Actor where id=:actorId",Actor.class);
         theQuery.setParameter("actorId", theId);
         theQuery.executeUpdate();
+    }
+
+    @Override
+    public List<Actor> getActorsByName(String name) {
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query<Actor> theQuery = currentSession.createQuery("from Actor where name=:name",Actor.class);
+
+        theQuery.setParameter("name",name);
+        return theQuery.getResultList();
+    }
+
+    @Override
+    public List<Actor> getActorsByAge(int age) {
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        Query<Actor> theQuery = currentSession.createQuery("from Actor where age=:age",Actor.class);
+
+        theQuery.setParameter("age",age);
+        return  theQuery.getResultList();
+    }
+
+    /*
+    @Override
+    public List<Actor> getActorsByMovieTVSerieId(int theMovieTVSerieId) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        //Query<Actor> theQuery = currentSession.createQuery("from movietvserie_actor where movietvserie_id=:movietvserieId",Actor.class);
+        Query<Actor> theQuery = currentSession.createQuery("from movietvserie_actor where movietvserie_id=:movietvserieId",Actor.class);
+        theQuery.setParameter("movietvserieId",theMovieTVSerieId);
+        return  theQuery.getResultList();
+    }
+    */
+
+    @Override
+    public List<Actor> getActorsByMovieTVSerieId(int theMovieTVSerieId) {
+
+        Session currentSession = entityManager.unwrap(Session.class);
+
+        //Query<MovieTVSerie> theQuery = currentSession.createQuery("from movietvserie_actor where movietvserie_id=:theMovieTVSerieId",MovieTVSerie.class);
+
+        Query<Actor> theQuery = currentSession.createQuery("select a from Actor a join a.movieTVSeries m where m.id=:movietvserieId",Actor.class);
+        theQuery.setParameter("movietvserieId",theMovieTVSerieId);
+        //return (List<Actor>) theQuery.getSingleResult().getActors();
+        return theQuery.getResultList();
     }
 }
 
