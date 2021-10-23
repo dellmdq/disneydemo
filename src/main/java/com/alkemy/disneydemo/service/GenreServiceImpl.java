@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class GenreServiceImpl implements GenreService{
     private GenreDAO genreDAO;
 
@@ -19,25 +20,25 @@ public class GenreServiceImpl implements GenreService{
 
 
     @Override
-    @Transactional
     public List<Genre> getAll() {
         return genreDAO.getAll();
     }
 
     @Override
-    @Transactional
     public Genre get(int theId) {
         return genreDAO.get(theId);
     }
 
     @Override
-    @Transactional
     public void save(Genre theGenre) {
         genreDAO.save(theGenre);
     }
 
+    public void update(Genre theGenre){
+        genreDAO.update(theGenre);
+    }
+
     @Override
-    @Transactional
     public void delete(int theId) {
         genreDAO.delete(theId);
     }

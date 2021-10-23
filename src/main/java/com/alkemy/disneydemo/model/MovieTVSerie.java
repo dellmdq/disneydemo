@@ -6,7 +6,9 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity(name="MovieTVSerie")
 @Table(name="movietvserie")
@@ -18,28 +20,30 @@ public class MovieTVSerie implements Serializable {
     @Column(name="id")
     private int id;
 
+    @Nullable
     @Column(name="image")
     private String image;
 
+    @Nullable
     @Column(name="title")
     private String title;
 
+    @Nullable
     @Column(name="release_date")
-    private Date date;
+    private String date;
 
+    @Nullable
     @Column(name="rating")
     private int rating;
 
     @Nullable
-    //@JsonBackReference
-    @ManyToOne(cascade= CascadeType.ALL //{CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH
-    )
+    @ManyToOne(cascade= {CascadeType.MERGE, CascadeType.DETACH})
     @JoinColumn(name="genre_id")
     private Genre genre;
 
     @Nullable
     @JsonIgnoreProperties("movietvseries")
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})//todo chequear que se borre la tabla combinada pero no los actores en la tabla de actores
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name="movietvserie_actor",
             joinColumns = {@JoinColumn(name="movietvserie_id")},
             inverseJoinColumns = {@JoinColumn(name="actor_id")})
@@ -49,7 +53,7 @@ public class MovieTVSerie implements Serializable {
     public MovieTVSerie() {
     }
 
-    public MovieTVSerie(String image, String title, Date date, int rating, Genre genre, Set<Actor> actors) {
+    public MovieTVSerie(String image, String title, String date, int rating, Genre genre, Set<Actor> actors) {
         this.image = image;
         this.title = title;
         this.date = date;
@@ -83,11 +87,11 @@ public class MovieTVSerie implements Serializable {
         this.title = title;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

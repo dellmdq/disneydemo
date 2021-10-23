@@ -2,12 +2,10 @@ package com.alkemy.disneydemo.rest;
 
 import com.alkemy.disneydemo.model.Actor;
 import com.alkemy.disneydemo.service.ActorService;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.monitorjbl.json.JsonResult;
 import com.monitorjbl.json.JsonView;
-import com.monitorjbl.json.JsonViewModule;
+
 import com.monitorjbl.json.Match;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -45,7 +43,7 @@ public class ActorRestController implements Serializable {
             return actorService.getActorsByMovieTVSerie(movies);
         }
 
-        //getall sin filtros
+        //getall sin filtros excluyendo props con JsonView
         JsonResult json = JsonResult.instance();
         List<Actor> actors = actorService.getAll();
         String[] excludedProps = {"id","age","weight","bio","movieTVSeries"};

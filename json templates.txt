@@ -1,0 +1,74 @@
+MOVIE POST
+{
+    "id": 20,
+    "image": "foto",
+    "title": "Bugs Bunny Remastered.",
+    "date": "1948-10-04",
+    "rating": 3,
+    "genre": {
+        "id": 2,
+        "name": "Cartoon",
+        "image": "foto"
+    },
+    "actors": [
+        {
+            "id": 5,
+            "image": "foto",
+            "name": "Bugs Bunny",
+            "age": 55,
+            "weight": 40.3,
+            "bio": "A little, naughty and cute bunny."
+        }
+    ]
+}
+
+MOVIE ADD ONLY
+{
+    "image": "foto",
+    "title": "Bugs Bunny Remastered.",
+    "date": "1948-10-04",
+    "rating": 3
+}
+
+
+
+
+MOVIE 3 GET
+{
+    "id": 3,
+    "image": "foto",
+    "title": "Pursuing the roadrunner",
+    "date": "2015-09-11",
+    "rating": 5,
+    "genre": {
+        "id": 3,
+        "name": "Comedy",
+        "image": "foto"
+    },
+    "actors": [
+        {
+            "id": 5,
+            "image": "foto",
+            "name": "Bugs Bunny",
+            "age": 55,
+            "weight": 40.3,
+            "bio": "A little, naughty and cute bunny."
+        },
+        {
+            "id": 6,
+            "image": "foto",
+            "name": "Road Runner",
+            "age": 23,
+            "weight": 14.3,
+            "bio": "Coyote's competition."
+        },
+        {
+            "id": 3,
+            "image": "foto",
+            "name": "The Coyote",
+            "age": 33,
+            "weight": 66.2,
+            "bio": "Acme sales people"
+        }
+    ]
+}

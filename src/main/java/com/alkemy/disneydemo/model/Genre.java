@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -24,9 +25,11 @@ public class Genre implements Serializable {
     @Column(name="id")
     private int id;
 
+    @Nullable
     @Column(name="name")
     private String name;
 
+    @Nullable
     @Column(name="image")
     private String image;
 
@@ -106,6 +109,23 @@ public class Genre implements Serializable {
                 ", image='" + image + '\'' +
                 ", movieTvSeries=" + movieTVSeries +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Genre)) {
+            return false;
+        }
+        Genre genre = (Genre) o;
+        return Objects.equals(id, genre.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

@@ -3,7 +3,13 @@ package com.alkemy.disneydemo.rest;
 import com.alkemy.disneydemo.model.Genre;
 import com.alkemy.disneydemo.model.MovieTVSerie;
 import com.alkemy.disneydemo.service.GenreService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -11,40 +17,41 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/genres")
 public class GenreRestController implements Serializable {
 
     private GenreService genreService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public GenreRestController(GenreService theGenreService) {
         genreService = theGenreService;
     }
 
-    @GetMapping("/genres")
+    @GetMapping
     public List<Genre> getAll() {
         return genreService.getAll();
     }
 
-    @GetMapping("/genres/{genreId}")
+    @GetMapping("/{genreId}")
     public Genre get(@PathVariable int genreId) {
         return genreService.get(genreId);
     }
 
-    @PostMapping("/genres")
+    @PostMapping
     public Genre add(@RequestBody Genre theGenre) {
         theGenre.setId(0);//so hibernate assigns the correct id in case the object already has one as a parameter
         genreService.save(theGenre);
         return theGenre;
     }
 
-    @PutMapping("/genres")
+    @PutMapping
     public Genre update(@RequestBody Genre theGenre) {
         genreService.save(theGenre);
         return theGenre;
     }
 
-    @DeleteMapping("/genres/{genreId}")
+    @DeleteMapping("/{genreId}")
     public String delete(@PathVariable int genreId) {
         Genre tempGenre = genreService.get(genreId);
 
@@ -63,5 +70,26 @@ public class GenreRestController implements Serializable {
         //null
         genreService.delete(genreId);
         return "The Genre deleted is: " + tempGenre + "\nId: " + tempGenre.getId();
+    }
+
+    @PatchMapping(path = "/{genreId}", consumes = "application/json-patch+json")
+    public Genre updateGenre(@PathVariable int genreId, @RequestBody JsonPatch patch){
+        try {
+            Genre genre = this.get(genreId);
+            Genre genrePatched = applyPatchToGenre(patch, genre);
+            genreService.update(genrePatched);
+            return genrePatched;
+        }
+        catch( JsonPatchException| JsonProcessingException e){
+            System.out.println("Error: Genre not updated.");
+            return genreService.get(genreId);
+        }
+    }
+
+
+
+    private Genre applyPatchToGenre(JsonPatch patch, Genre targetGenre) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetGenre, JsonNode.class));
+        return objectMapper.treeToValue(patched, Genre.class);
     }
 }

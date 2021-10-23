@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,31 +20,38 @@ public class Actor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
     @Column(name="id")
     private int id;
 
+    @Nullable
     @Column(name="image")
     private String image; //ver API the movie database para traer link imagen
 
+    @Nullable
     @Column(name="name")
     private String name;
 
+    @Nullable
     @Column(name="age")
     private int age;
 
+    @Nullable
     @Column(name="weight")
     private float weight;
 
+    @Nullable
     @Column(name="bio")
     private String bio;
 
 
-    //muchos a muchos //todo ver tipos de cascade
+    //muchos a muchos //
+    @Nullable
     @JsonBackReference
     @JsonIgnoreProperties({"actors","genres"})
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name="movietvserie_actor",
-            joinColumns = @JoinColumn(name="actor_id"),//todo cargar actors and show para testear esto
+            joinColumns = @JoinColumn(name="actor_id"),
             inverseJoinColumns =@JoinColumn(name="movietvserie_id")
     )
     private Set<MovieTVSerie> movieTVSeries = new HashSet<MovieTVSerie>();

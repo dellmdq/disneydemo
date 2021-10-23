@@ -13,4 +13,6 @@ public interface GenreService {
     public void save(Genre theGenre);//hibernate saveOrUpdate
 
     public void delete(int theId);
+
+    public void update(Genre theGenre);
 }

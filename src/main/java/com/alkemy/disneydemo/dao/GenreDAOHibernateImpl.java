@@ -44,6 +44,11 @@ public class GenreDAOHibernateImpl implements GenreDAO {
         currentSession.saveOrUpdate(theGenre);
     }
 
+    public void update(Genre theGenre){
+        Session currentSession = entityManager.unwrap(Session.class);
+        currentSession.merge(theGenre);
+    }
+
     @Override
     public void delete(int theId) {
         //get session

@@ -1,6 +1,7 @@
 package com.alkemy.disneydemo.config;
 
 import com.alkemy.disneydemo.filter.CsrfLoggerFilter;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.monitorjbl.json.JsonViewSupportFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -65,9 +66,5 @@ public class DisneyDemoConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
-    @Bean
-    public JsonViewSupportFactoryBean views() {
-        return new JsonViewSupportFactoryBean();
-    }
 
 }
