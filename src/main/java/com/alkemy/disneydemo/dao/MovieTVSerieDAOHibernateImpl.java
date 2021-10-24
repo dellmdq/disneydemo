@@ -54,4 +54,10 @@ public class MovieTVSerieDAOHibernateImpl implements MovieTVSerieDAO {
         theQuery.setParameter("MovieTVSerieId",theId);
         theQuery.executeUpdate();
     }
+
+    @Override
+    public void update(MovieTVSerie theMovieTVSerie) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        currentSession.merge(theMovieTVSerie);
+    }
 }

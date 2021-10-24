@@ -104,6 +104,12 @@ public class ActorDAOHibernateImpl implements ActorDAO {
         //return (List<Actor>) theQuery.getSingleResult().getActors();
         return theQuery.getResultList();
     }
+
+    @Override
+    public void update(Actor theActor) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        currentSession.merge(theActor);
+    }
 }
 
 

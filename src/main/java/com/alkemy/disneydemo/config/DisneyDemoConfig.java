@@ -1,6 +1,8 @@
 package com.alkemy.disneydemo.config;
 
 import com.alkemy.disneydemo.filter.CsrfLoggerFilter;
+import com.alkemy.disneydemo.utils.JsonPatchUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.monitorjbl.json.JsonViewSupportFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class DisneyDemoConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+    @Bean
+    public JsonPatchUtils jsonPatchUtils(){return new JsonPatchUtils();}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

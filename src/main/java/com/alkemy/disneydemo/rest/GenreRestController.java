@@ -3,6 +3,7 @@ package com.alkemy.disneydemo.rest;
 import com.alkemy.disneydemo.model.Genre;
 import com.alkemy.disneydemo.model.MovieTVSerie;
 import com.alkemy.disneydemo.service.GenreService;
+import com.alkemy.disneydemo.utils.JsonPatchUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,11 +22,12 @@ import java.util.Set;
 public class GenreRestController implements Serializable {
 
     private GenreService genreService;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private JsonPatchUtils jsonPatchUtils;
 
     @Autowired
-    public GenreRestController(GenreService theGenreService) {
-        genreService = theGenreService;
+    public GenreRestController(GenreService genreService, JsonPatchUtils jsonPatchUtils) {
+        this.genreService = genreService;
+        this.jsonPatchUtils = jsonPatchUtils;
     }
 
     @GetMapping
@@ -73,10 +75,10 @@ public class GenreRestController implements Serializable {
     }
 
     @PatchMapping(path = "/{genreId}", consumes = "application/json-patch+json")
-    public Genre updateGenre(@PathVariable int genreId, @RequestBody JsonPatch patch){
+    public Genre update(@PathVariable int genreId, @RequestBody JsonPatch patch){
         try {
             Genre genre = this.get(genreId);
-            Genre genrePatched = applyPatchToGenre(patch, genre);
+            Genre genrePatched = (Genre) jsonPatchUtils.applyPatch(patch, genre);
             genreService.update(genrePatched);
             return genrePatched;
         }
@@ -84,12 +86,5 @@ public class GenreRestController implements Serializable {
             System.out.println("Error: Genre not updated.");
             return genreService.get(genreId);
         }
-    }
-
-
-
-    private Genre applyPatchToGenre(JsonPatch patch, Genre targetGenre) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = patch.apply(objectMapper.convertValue(targetGenre, JsonNode.class));
-        return objectMapper.treeToValue(patched, Genre.class);
     }
 }

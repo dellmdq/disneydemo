@@ -11,4 +11,7 @@ public interface MovieTVSerieService {
     public void save(MovieTVSerie theMovieTVSerie);
 
     public void delete(int theId);
+
+    public void update(MovieTVSerie movieTVSerie);
+
 }

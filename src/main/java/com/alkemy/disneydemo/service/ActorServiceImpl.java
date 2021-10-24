@@ -41,18 +41,27 @@ public class ActorServiceImpl implements ActorService {
     }
 
     @Override
+    @Transactional
     public List<Actor> getActorsByName(String name) {
         return actorDAO.getActorsByName(name);
     }
 
     @Override
+    @Transactional
     public List<Actor> getActorsByAge(int age) {
         return actorDAO.getActorsByAge(age);
     }
 
     @Override
+    @Transactional
     public List<Actor> getActorsByMovieTVSerie(int theMovieTVSerieId) {
 
         return actorDAO.getActorsByMovieTVSerieId(theMovieTVSerieId);
+    }
+
+    @Override
+    @Transactional
+    public void update(Actor theActor) {
+        actorDAO.update(theActor);
     }
 }

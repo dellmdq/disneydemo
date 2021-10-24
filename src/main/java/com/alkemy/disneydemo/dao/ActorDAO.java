@@ -21,4 +21,5 @@ public interface ActorDAO {
 
     public List<Actor> getActorsByMovieTVSerieId(int theMovieTVSerieId);
 
+    public void update(Actor theActor);
 }

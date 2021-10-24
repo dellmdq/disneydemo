@@ -2,7 +2,11 @@ package com.alkemy.disneydemo.rest;
 
 import com.alkemy.disneydemo.model.MovieTVSerie;
 import com.alkemy.disneydemo.service.MovieTVSerieService;
+import com.alkemy.disneydemo.utils.JsonPatchUtils;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.monitorjbl.json.JsonResult;
 import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.Match;
@@ -17,10 +21,12 @@ import java.util.List;
 public class MovieTVSerieRestController implements Serializable {
 
     private MovieTVSerieService movieTVSerieService;
+    private JsonPatchUtils jsonPatchUtils;
 
     @Autowired
-    public MovieTVSerieRestController(MovieTVSerieService theMovieTVSerieService){
+    public MovieTVSerieRestController(MovieTVSerieService theMovieTVSerieService, JsonPatchUtils theJsonPatchUtils){
         movieTVSerieService = theMovieTVSerieService;
+        jsonPatchUtils =  theJsonPatchUtils;
     }
 
     //expose "/shows" and return list of shows
@@ -64,5 +70,19 @@ public class MovieTVSerieRestController implements Serializable {
         movieTVSerieService.delete(movietvseriesId);
 
         return tempMovieTvSerie;
+    }
+
+    @PatchMapping("/{movietvseriesId}")
+    public MovieTVSerie update(@PathVariable int movietvseriesId, @RequestBody JsonPatch patch){
+        try{
+            MovieTVSerie movieTVSerie = this.get(movietvseriesId);
+            MovieTVSerie movieTVSeriePatched = (MovieTVSerie) jsonPatchUtils.applyPatch(patch, movieTVSerie);
+            movieTVSerieService.update(movieTVSeriePatched);
+            return movieTVSeriePatched;
+        }
+        catch(JsonPatchException | JsonProcessingException e){
+            System.out.println("Error: MovieTVSerie not updated");
+            return movieTVSerieService.get(movietvseriesId);
+        }
     }
 }

@@ -1,8 +1,15 @@
 package com.alkemy.disneydemo.rest;
 
 import com.alkemy.disneydemo.model.Actor;
+import com.alkemy.disneydemo.model.Genre;
 import com.alkemy.disneydemo.service.ActorService;
 
+import com.alkemy.disneydemo.utils.JsonPatchUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import com.monitorjbl.json.JsonResult;
 import com.monitorjbl.json.JsonView;
 
@@ -23,9 +30,13 @@ import static com.monitorjbl.json.Match.match;
 public class ActorRestController implements Serializable {
 
     private ActorService actorService;
+    private JsonPatchUtils jsonPatchUtils;
 
     @Autowired
-    public ActorRestController(ActorService theActorService){ actorService = theActorService;}
+    public ActorRestController(ActorService actorService, JsonPatchUtils jsonPatchUtils) {
+        this.actorService = actorService;
+        this.jsonPatchUtils = jsonPatchUtils;
+    }
 
     //expose "/actor" and return list of actors. ONLY SHOW NAME AND IMAGE
     @GetMapping
@@ -90,6 +101,21 @@ public class ActorRestController implements Serializable {
         actorService.delete(actorId);
         return "The Actor deleted is: " + tempActor + "\nId: " + tempActor.getId();
     }
+
+    @PatchMapping(path = "/{actorId}", consumes = "application/json-patch+json")
+    public Actor updateActor(@PathVariable int actorId, @RequestBody JsonPatch patch){
+        try {
+            Actor actor = this.get(actorId);
+            Actor actorPatched = (Actor) jsonPatchUtils.applyPatch(patch, actor);
+            actorService.update(actorPatched);
+            return actorPatched;
+        }
+        catch( JsonPatchException | JsonProcessingException e){
+            System.out.println("Error: Genre not updated.");
+            return actorService.get(actorId);
+        }
+    }
+
 
 
 }

@@ -41,4 +41,10 @@ public class MovieTVSerieServiceImpl implements MovieTVSerieService {
     public void delete(int theId) {
         movieTVSerieDAO.delete(theId);
     }
+
+    @Override
+    @Transactional
+    public void update(MovieTVSerie movieTVSerie) {
+        movieTVSerieDAO.update(movieTVSerie);
+    }
 }

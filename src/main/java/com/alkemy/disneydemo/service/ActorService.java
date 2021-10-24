@@ -10,7 +10,7 @@ public interface ActorService {
 
     public Actor get(int theId);
 
-    public void save(Actor theActor);//hibernate saveOrUpdate
+    public void save(Actor theActor);//hibernate saveOrUpdate (post or put requests)
 
     public void delete(int theId);
 
@@ -19,4 +19,6 @@ public interface ActorService {
     public List<Actor> getActorsByAge(int age);
 
     public List<Actor> getActorsByMovieTVSerie(int theMovieTVSerieId);
+
+    public void update(Actor theActor);// hibernate merge (patch request)
 }

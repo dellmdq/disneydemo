@@ -4,7 +4,7 @@ Alkemy Challenge
 - Springboot
 - SpringREST
 - Spring Security (CSRF Token configured for Post-Man access and Swagger)
-- Swagger
+- Login Auth. Data encrypted with Bcrypt.
 - MySQL tables created manually
 - Hibernate ORM
 

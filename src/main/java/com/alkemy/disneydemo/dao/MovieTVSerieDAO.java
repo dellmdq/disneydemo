@@ -14,4 +14,5 @@ public interface MovieTVSerieDAO {
 
     public void delete(int theId);
 
+    public void update(MovieTVSerie movieTVSerie);
 }
