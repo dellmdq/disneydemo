@@ -14,4 +14,9 @@ public interface MovieTVSerieService {
 
     public void update(MovieTVSerie movieTVSerie);
 
+    public List<MovieTVSerie> getMovieTVSerieByName(String name);
+
+    public List<MovieTVSerie> getMovieTVSerieByGenre(String genre);
+
+    public List<MovieTVSerie> getMovieTVSerieSorted(String sort);
 }

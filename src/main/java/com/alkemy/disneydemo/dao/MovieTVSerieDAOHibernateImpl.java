@@ -60,4 +60,35 @@ public class MovieTVSerieDAOHibernateImpl implements MovieTVSerieDAO {
         Session currentSession = entityManager.unwrap(Session.class);
         currentSession.merge(theMovieTVSerie);
     }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieByName(String name) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        String HqlQuery = "from MovieTVSerie where title LIKE '%"+name+"%'";
+        Query query = currentSession.createQuery(HqlQuery);
+        //Query<MovieTVSerie> theQuery = currentSession.createQuery("from MovieTVSerie where title LIKE '%:name%'",MovieTVSerie.class);
+
+        //theQuery.setParameter("name",name);
+        //return theQuery.getResultList();
+        return query.list();
+    }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieByGenre(String genreName) {
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query<MovieTVSerie> theQuery = currentSession.createQuery("select m from MovieTVSerie m join m.genre g where g.name=:genreName");
+        theQuery.setParameter("genreName",genreName);
+        return theQuery.getResultList();
+    }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieSorted(String sort) {
+        if(sort.equals("ASC") || sort.equals("asc") || sort.equals("DESC") || sort.equals("desc")){
+            Session currentSession = entityManager.unwrap(Session.class);
+            Query<MovieTVSerie> theQuery = currentSession.createQuery("FROM MovieTVSerie m ORDER BY m.release_date "+sort+"", MovieTVSerie.class);
+            return theQuery.getResultList();
+        }
+        return null;
+    }
+
 }

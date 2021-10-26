@@ -13,6 +13,7 @@ import com.monitorjbl.json.Match;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.io.Serializable;
 import java.util.List;
 
@@ -34,7 +35,22 @@ public class MovieTVSerieRestController implements Serializable {
     public List<MovieTVSerie> getAll(){return movieTVSerieService.getAll();}*/
 
     @GetMapping()
-    public List<MovieTVSerie> getAll(){
+    public List<MovieTVSerie> getAll(@QueryParam("name") String name,
+                                     @QueryParam("genre") String genre,
+                                     @QueryParam("order") String order){
+
+
+        if(name != null && name.length() >0){
+            return movieTVSerieService.getMovieTVSerieByName(name);
+        }
+        if(genre != null && genre.length() >0){
+            return movieTVSerieService.getMovieTVSerieByGenre(genre);
+        }
+        if((order != null && order.length() >0)){
+            return movieTVSerieService.getMovieTVSerieSorted(order);
+        }
+
+        //getall sin filtro
         JsonResult json = JsonResult.instance();
         List<MovieTVSerie> movieTVSeries = movieTVSerieService.getAll();
         String[] excludedProps = {"id","rating","genre","actors"};

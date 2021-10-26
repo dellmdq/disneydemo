@@ -47,4 +47,19 @@ public class MovieTVSerieServiceImpl implements MovieTVSerieService {
     public void update(MovieTVSerie movieTVSerie) {
         movieTVSerieDAO.update(movieTVSerie);
     }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieByName(String name) {
+        return movieTVSerieDAO.getMovieTVSerieByName(name);
+    }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieByGenre(String genre) {
+        return movieTVSerieDAO.getMovieTVSerieByGenre(genre);
+    }
+
+    @Override
+    public List<MovieTVSerie> getMovieTVSerieSorted(String sort) {
+        return movieTVSerieDAO.getMovieTVSerieSorted(sort);
+    }
 }

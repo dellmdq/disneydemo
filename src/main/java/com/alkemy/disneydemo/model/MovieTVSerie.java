@@ -30,7 +30,7 @@ public class MovieTVSerie implements Serializable {
 
     @Nullable
     @Column(name="release_date")
-    private String date;
+    private String release_date;
 
     @Nullable
     @Column(name="rating")
@@ -53,10 +53,10 @@ public class MovieTVSerie implements Serializable {
     public MovieTVSerie() {
     }
 
-    public MovieTVSerie(String image, String title, String date, int rating, Genre genre, Set<Actor> actors) {
+    public MovieTVSerie(String image, String title, String release_date, int rating, Genre genre, Set<Actor> actors) {
         this.image = image;
         this.title = title;
-        this.date = date;
+        this.release_date = release_date;
         this.rating = rating;
         this.genre = genre;
         this.actors = actors;
@@ -87,12 +87,12 @@ public class MovieTVSerie implements Serializable {
         this.title = title;
     }
 
-    public String getDate() {
-        return date;
+    public String getRelease_date() {
+        return release_date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setRelease_date(String release_date) {
+        this.release_date = release_date;
     }
 
     public int getRating() {
@@ -126,7 +126,7 @@ public class MovieTVSerie implements Serializable {
                 "id=" + id +
                 ", image='" + image + '\'' +
                 ", title='" + title + '\'' +
-                ", date=" + date +
+                ", date=" + release_date +
                 ", rating=" + rating +
                 ", actorset=" + actors +
                 ", genre=" + genre +
