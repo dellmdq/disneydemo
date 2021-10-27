@@ -44,7 +44,7 @@ public class DisneyDemoConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/api/**","/","index","/css/*","js/*","/resources/**", "/registration","/auth/login","/characters/**").authenticated()
-                    .antMatchers("/auth/register/**").permitAll()
+                    .antMatchers("/auth/register/**","auth/verify/**").permitAll()
                 //.anyRequest().authenticated()
                     .and()
                 .formLogin()

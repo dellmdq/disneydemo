@@ -3,8 +3,8 @@ package com.alkemy.disneydemo.dao;
 import javax.persistence.EntityManager;
 
 import com.alkemy.disneydemo.entity.User;
+import net.bytebuddy.utility.RandomString;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,8 +39,27 @@ public class UserDaoImpl implements UserDao {
 		// get current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
 
+
 		// create the user ... finally LOL
-		currentSession.saveOrUpdate(theUser);
+		currentSession.save(theUser);
+	}
+
+	@Override
+	public void update(User theUser) {
+		// get current hibernate session
+		Session currentSession = entityManager.unwrap(Session.class);
+
+		// create the user ... finally LOL
+		currentSession.merge(theUser);
+	}
+
+	@Override
+	public User findByVerificationCode(String verification_code) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		Query<User> theQuery = currentSession.createQuery("select u from User u where u.verificationCode = :verification_code", User.class);
+		theQuery.setParameter("verification_code",verification_code);
+		System.out.println("User verified: " + theQuery.getResultList());
+		return theQuery.getSingleResult();
 	}
 
 }

@@ -11,7 +11,7 @@ import com.alkemy.disneydemo.validation.ValidEmail;
 @FieldMatch.List({
     @FieldMatch(first = "password", second = "matchingPassword", message = "The password fields must match")
 })
-public class DemoUser {
+public class User {
 
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
@@ -38,7 +38,7 @@ public class DemoUser {
 	@Size(min = 1, message = "is required")
 	private String email;
 
-	public DemoUser() {
+	public User() {
 
 	}
 

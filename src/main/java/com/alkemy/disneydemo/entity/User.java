@@ -1,10 +1,15 @@
 package com.alkemy.disneydemo.entity;
 
+import com.alkemy.disneydemo.validation.FieldMatch;
+import com.alkemy.disneydemo.validation.ValidEmail;
+
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "user")
+@FieldMatch.List({@FieldMatch(first="password",second = "matchingPassword",message = "The passwords fields must match")})
 public class User {
 
 	@Id
@@ -12,18 +17,34 @@ public class User {
 	@Column(name = "id")
 	private Long id;
 
+	@NotNull
+	@Size(min = 1, message ="is required")
 	@Column(name = "username")
 	private String userName;
 
+	@NotNull(message = "is required")
+	@Size(min = 1, message ="is required")
 	@Column(name = "password")
 	private String password;
 
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	@Transient
+	private String matchingPassword;
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	@Column(name = "first_name")
 	private String firstName;
 
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	@Column(name = "last_name")
 	private String lastName;
 
+	@ValidEmail
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
 	@Column(name = "email")
 	private String email;
 
@@ -32,6 +53,12 @@ public class User {
 	joinColumns = @JoinColumn(name = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
+
+	@Column(name="verification_code")
+	private String verificationCode;
+
+	@Column(name="enabled")
+	private boolean enabled;
 
 	public User() {
 	}
@@ -52,6 +79,28 @@ public class User {
 		this.lastName = lastName;
 		this.email = email;
 		this.roles = roles;
+	}
+
+	public User(String userName, String password, String matchingPassword, String firstName, String lastName, String email, Collection<Role> roles, String verificationCode, Boolean enabled) {
+		this.userName = userName;
+		this.password = password;
+		this.matchingPassword = matchingPassword;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.roles = roles;
+		this.verificationCode = verificationCode;
+		this.enabled = enabled;
+	}
+
+	public User(String userName, String password, String firstName, String lastName, String email, Collection<Role> roles, String verificationCode) {
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.roles = roles;
+		this.verificationCode = verificationCode;
 	}
 
 	public Long getId() {
@@ -110,10 +159,43 @@ public class User {
 		this.roles = roles;
 	}
 
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+	public String getMatchingPassword() {
+		return matchingPassword;
+	}
+
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Override
 	public String toString() {
-		return "User{" + "id=" + id + ", userName='" + userName + '\'' + ", password='" + "*********" + '\''
-				+ ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
-				+ ", roles=" + roles + '}';
+		return "User{" +
+				"id=" + id +
+				", userName='" + userName + '\'' +
+				", password='" + password + '\'' +
+				", matchingPassword='" + matchingPassword + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", roles=" + roles +
+				", verification_code='" + verificationCode + '\'' +
+				", enabled=" + enabled +
+				'}';
 	}
 }

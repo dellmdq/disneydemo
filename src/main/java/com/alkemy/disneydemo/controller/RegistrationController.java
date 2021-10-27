@@ -1,12 +1,14 @@
 package com.alkemy.disneydemo.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import com.alkemy.disneydemo.entity.User;
 import com.alkemy.disneydemo.service.UserService;
-import com.alkemy.disneydemo.user.DemoUser;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -39,16 +41,16 @@ public class RegistrationController {
 	@GetMapping("/register")
 	public String showMyLoginPage(Model theModel) {
 		
-		theModel.addAttribute("demoUser", new DemoUser());
+		theModel.addAttribute("user", new User());
 		
 		return "registration-form";
 	}
 
 	@PostMapping("/processRegistrationForm")
 	public String processRegistrationForm(
-				@Valid @ModelAttribute("demoUser") DemoUser theDemoUser,
+				@Valid @ModelAttribute("demoUser") User theDemoUser,
 				BindingResult theBindingResult, 
-				Model theModel) {
+				Model theModel) throws MessagingException, UnsupportedEncodingException {
 		
 		String userName = theDemoUser.getUserName();
 		logger.info("Processing registration form for: " + userName);
@@ -61,18 +63,25 @@ public class RegistrationController {
 		// check the database if user already exists
         User existing = userService.findByUserName(userName);
         if (existing != null){
-        	theModel.addAttribute("demoUser", new DemoUser());
+        	theModel.addAttribute("demoUser", new User());
 			theModel.addAttribute("registrationError", "User name already exists.");
 
 			logger.warning("User name already exists.");
         	return "registration-form";
         }
-        
+
+
+
         // create user account        						
-        userService.save(theDemoUser);
+        theDemoUser = userService.save(theDemoUser);
         
         logger.info("Successfully created user: " + userName);
+
+
+		userService.sendVerificationEmail(theDemoUser);
         
         return "registration-confirmation";		
 	}
+
+
 }
